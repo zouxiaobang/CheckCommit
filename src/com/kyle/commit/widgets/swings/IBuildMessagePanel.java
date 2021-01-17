@@ -1,5 +1,7 @@
 package com.kyle.commit.widgets.swings;
 
+import com.kyle.commit.value.FooterType;
+
 import javax.swing.*;
 
 /**
@@ -37,4 +39,10 @@ public interface IBuildMessagePanel {
      * 获取备注信息
      */
     String getFooter();
+
+    /**
+     * true：关闭issue
+     * false：不兼容变动
+     */
+    FooterType getFooterType();
 }

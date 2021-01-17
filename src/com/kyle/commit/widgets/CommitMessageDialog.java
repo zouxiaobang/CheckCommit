@@ -32,8 +32,14 @@ public class CommitMessageDialog extends DialogWrapper {
     }
 
     public String getCommitMessage() {
+        StringBuilder stringBuilder = new StringBuilder();
         // 判断输入内容
+        stringBuilder.append(buildMessagePanel.getType());
 
         return null;
+    }
+
+    public boolean checkMessage() {
+        return false;
     }
 }

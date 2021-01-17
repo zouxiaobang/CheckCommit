@@ -43,7 +43,6 @@
         <action id="create-commit-message-action" class="com.kyle.commit.CommitMessageAction" text="CommitMessage"
                 description="Create an Action that conforms to the Angular specification to submit information">
             <add-to-group group-id="Vcs.MessageActionGroup" anchor="first"/>
-            <add-to-group group-id="RefactoringMenu" anchor="first"/>
         </action>
     </actions>
 

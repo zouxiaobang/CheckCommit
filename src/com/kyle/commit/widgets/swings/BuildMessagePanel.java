@@ -2,6 +2,7 @@ package com.kyle.commit.widgets.swings;
 
 import com.kyle.commit.value.CommitType;
 import com.kyle.commit.value.FieldDefaultText;
+import com.kyle.commit.value.FooterType;
 import com.kyle.commit.widgets.DefaultTextListener;
 
 import javax.swing.*;
@@ -23,7 +24,6 @@ public class BuildMessagePanel implements IBuildMessagePanel {
     private JPanel footerPanel;
     private JRadioButton rbCompatibleChange;
     private JRadioButton rbCloseIssue;
-    private ButtonGroup buttonGroup;
 
     public BuildMessagePanel() {
         CommitType[] commitTypes = CommitType.values();
@@ -45,9 +45,10 @@ public class BuildMessagePanel implements IBuildMessagePanel {
         taBody.addFocusListener(new DefaultTextListener(taBody, FieldDefaultText.DT_BODY.getDefaultText()));
         tfFooter.addFocusListener(new DefaultTextListener(tfFooter, FieldDefaultText.DT_FOOTER.getDefaultText()));
 
-        buttonGroup = new ButtonGroup();
+        ButtonGroup buttonGroup = new ButtonGroup();
         buttonGroup.add(rbCompatibleChange);
         buttonGroup.add(rbCloseIssue);
+        rbCloseIssue.setSelected(true);
     }
 
     @Override
@@ -63,21 +64,44 @@ public class BuildMessagePanel implements IBuildMessagePanel {
 
     @Override
     public String getScope() {
-        return this.tfScope.getText().trim();
+        if (FieldDefaultText.DT_SCORE.getDefaultText().equals(this.tfScope.getText().trim())) {
+            return this.tfScope.getText().trim();
+        }
+        return "";
     }
 
     @Override
     public String getSubject() {
-        return this.tfSubject.getText().trim();
+        if (FieldDefaultText.DT_SUBJECT.getDefaultText().equals(this.tfSubject.getText().trim())) {
+            return this.tfSubject.getText().trim();
+        }
+        return "";
     }
 
     @Override
     public String getBody() {
-        return this.taBody.getText().trim();
+        if (FieldDefaultText.DT_BODY.getDefaultText().equals(this.taBody.getText().trim())) {
+            return this.taBody.getText().trim();
+        }
+        return "";
     }
 
     @Override
     public String getFooter() {
-        return this.tfFooter.getText().trim();
+        if (FieldDefaultText.DT_FOOTER.getDefaultText().equals(this.tfFooter.getText().trim())) {
+            return this.tfFooter.getText().trim();
+        }
+        return "";
+    }
+
+    @Override
+    public FooterType getFooterType() {
+        if (this.rbCloseIssue.isSelected()) {
+            return FooterType.FOOTER_CLOSE_ISSUE;
+        } else if (this.rbCompatibleChange.isSelected()) {
+            return FooterType.FOOTER_COMPATIBLE_CHANGE;
+        }
+
+        return FooterType.FOOTER_CLOSE_ISSUE;
     }
 }

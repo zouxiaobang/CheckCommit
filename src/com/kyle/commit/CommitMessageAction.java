@@ -30,7 +30,11 @@ public class CommitMessageAction extends AnAction implements DumbAware {
         CommitMessageDialog commitMessageDialog = new CommitMessageDialog(event.getProject(), new BuildMessagePanel());
         commitMessageDialog.show();
         if (commitMessageDialog.getExitCode() == DialogWrapper.OK_EXIT_CODE) {
-            commitMessagePanel.setCommitMessage(commitMessageDialog.getCommitMessage());
+            if (!commitMessageDialog.checkMessage()) {
+
+            } else {
+                commitMessagePanel.setCommitMessage(commitMessageDialog.getCommitMessage());
+            }
         }
     }
 
