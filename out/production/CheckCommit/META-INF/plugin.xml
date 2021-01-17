@@ -1,0 +1,50 @@
+<idea-plugin>
+    <id>plugin-check-commit-info</id>
+    <name>Check Commit</name>
+    <version>1.0</version>
+    <vendor email="zouxiaobang@qq.com">Kyle</vendor>
+
+    <description><![CDATA[
+      <p>如果你想自动创建一个规范的提交信息，那么请使用我</p>
+
+        本插件生成commit message符合Angular规范，并适当作出删减。
+        <pre>
+        HEADER:</br>
+        type(必须)：用于说明提交类型。feat(新增功能)/fix(修改Bug)/docs(修改文档，如修改了README.md)/style(对格式进行修改，如果缩进、空格等)
+        /refactor(重构)/bug perf(优化，如提升性能，用户体验等)/test(测试用例)/chore(工具，如添加依赖、工具等)/revert(版本回滚)</br>
+        scope(可选)：用于说明影响的范围(如service、spi、web...)</br>
+        subject(必须)：修改目的的简要描述，不超过50个字符，且不能以'.'结尾(一般使用jira中的标题)</br>
+        </br>
+
+        BODY:</br>
+        body(可选)：对修改内容描述的补充(可包含：1、修改内容的必要性；2、如何解决该问题；3、影响的地方... 不做强制要求)</br>
+        </br>
+
+        FOOTER:</br>
+        footer(可选)：备注信息(一般可填写jira、store的链接)</br>
+        </br>
+        </pre>
+    ]]></description>
+
+    <!-- please see https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
+    <idea-version since-build="173.0"/>
+
+    <!-- please see https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
+         on how to target different products -->
+    <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.modules.vcs</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Add your extensions here -->
+    </extensions>
+
+    <actions>
+        <!-- Add your actions here -->
+        <action id="create-commit-message-action" class="com.kyle.commit.CommitMessageAction" text="CommitMessage"
+                description="Create an Action that conforms to the Angular specification to submit information">
+            <add-to-group group-id="Vcs.MessageActionGroup" anchor="first"/>
+            <add-to-group group-id="RefactoringMenu" anchor="first"/>
+        </action>
+    </actions>
+
+</idea-plugin>
