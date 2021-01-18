@@ -9,9 +9,20 @@ public enum FooterType {
     /**
      * 关闭issue
      */
-    FOOTER_CLOSE_ISSUE,
+    FOOTER_CLOSE_ISSUE("Closes: "),
     /**
      * 不兼容变动
      */
-    FOOTER_COMPATIBLE_CHANGE;
+    FOOTER_COMPATIBLE_CHANGE("BREAKING CHANGE: ");
+
+    private final String displayText;
+
+
+    FooterType(String displayText) {
+        this.displayText = displayText;
+    }
+
+    public String getDisplayText() {
+        return displayText;
+    }
 }

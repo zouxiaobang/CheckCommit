@@ -64,7 +64,7 @@ public class BuildMessagePanel implements IBuildMessagePanel {
 
     @Override
     public String getScope() {
-        if (FieldDefaultText.DT_SCORE.getDefaultText().equals(this.tfScope.getText().trim())) {
+        if (!FieldDefaultText.DT_SCORE.getDefaultText().equals(this.tfScope.getText().trim())) {
             return this.tfScope.getText().trim();
         }
         return "";
@@ -72,7 +72,7 @@ public class BuildMessagePanel implements IBuildMessagePanel {
 
     @Override
     public String getSubject() {
-        if (FieldDefaultText.DT_SUBJECT.getDefaultText().equals(this.tfSubject.getText().trim())) {
+        if (!FieldDefaultText.DT_SUBJECT.getDefaultText().equals(this.tfSubject.getText().trim())) {
             return this.tfSubject.getText().trim();
         }
         return "";
@@ -80,7 +80,7 @@ public class BuildMessagePanel implements IBuildMessagePanel {
 
     @Override
     public String getBody() {
-        if (FieldDefaultText.DT_BODY.getDefaultText().equals(this.taBody.getText().trim())) {
+        if (!FieldDefaultText.DT_BODY.getDefaultText().equals(this.taBody.getText().trim())) {
             return this.taBody.getText().trim();
         }
         return "";
@@ -88,7 +88,7 @@ public class BuildMessagePanel implements IBuildMessagePanel {
 
     @Override
     public String getFooter() {
-        if (FieldDefaultText.DT_FOOTER.getDefaultText().equals(this.tfFooter.getText().trim())) {
+        if (!FieldDefaultText.DT_FOOTER.getDefaultText().equals(this.tfFooter.getText().trim())) {
             return this.tfFooter.getText().trim();
         }
         return "";

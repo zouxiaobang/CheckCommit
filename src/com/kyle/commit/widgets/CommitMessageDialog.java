@@ -2,10 +2,18 @@ package com.kyle.commit.widgets;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
+import com.intellij.openapi.ui.Messages;
+import com.intellij.openapi.ui.ValidationInfo;
+import com.intellij.openapi.util.NlsContexts;
+import com.intellij.openapi.util.text.StringUtil;
+import com.kyle.commit.value.ElementNecessary;
+import com.kyle.commit.value.FooterType;
 import com.kyle.commit.widgets.swings.IBuildMessagePanel;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
 
 /**
  * @author xb.zou
@@ -13,7 +21,11 @@ import javax.swing.*;
  * @option 提交消息的对话框 -- 对填写内容进行规定
  */
 public class CommitMessageDialog extends DialogWrapper {
-    private IBuildMessagePanel buildMessagePanel;
+    private final static String CHAR_POINT = ".";
+    private final static String CHAR_POINT_CN = "。";
+    private final static int LENGTH_SUBJECT = 50;
+
+    private final IBuildMessagePanel buildMessagePanel;
 
     public CommitMessageDialog(@Nullable Project project, IBuildMessagePanel buildMessagePanel) {
         super(project);
@@ -31,15 +43,101 @@ public class CommitMessageDialog extends DialogWrapper {
         return buildMessagePanel.getMainPanel();
     }
 
-    public String getCommitMessage() {
-        StringBuilder stringBuilder = new StringBuilder();
-        // 判断输入内容
-        stringBuilder.append(buildMessagePanel.getType());
+    @NotNull
+    @Override
+    protected Action[] createActions() {
+        DialogWrapperExitAction cancelAction = new DialogWrapperExitAction("取消构建", CANCEL_EXIT_CODE);
+        CustomOkAction okAction = new CustomOkAction("开始构建");
+        // 设置默认获取焦点
+        okAction.putValue(DialogWrapper.DEFAULT_ACTION, true);
+
+        return new Action[]{okAction, cancelAction};
+    }
+
+    @Nullable
+    @Override
+    protected ValidationInfo doValidate() {
+        // 必要性判断
+        if (ElementNecessary.EL_TYPE.getNecessary() && StringUtil.isEmpty(buildMessagePanel.getType())) {
+            return new ValidationInfo(ElementNecessary.EL_TYPE.getElementErrorMessage());
+        }
+
+        if (ElementNecessary.EL_SCOPE.getNecessary() && StringUtil.isEmpty(buildMessagePanel.getScope())) {
+            return new ValidationInfo(ElementNecessary.EL_SCOPE.getElementErrorMessage());
+        }
+
+        if (ElementNecessary.EL_SUBJECT.getNecessary() && StringUtil.isEmpty(buildMessagePanel.getSubject())) {
+            return new ValidationInfo(ElementNecessary.EL_SUBJECT.getElementErrorMessage());
+        }
+
+        if (ElementNecessary.EL_BODY.getNecessary() && StringUtil.isEmpty(buildMessagePanel.getBody())) {
+            return new ValidationInfo(ElementNecessary.EL_BODY.getElementErrorMessage());
+        }
+
+        if (ElementNecessary.EL_FOOTER.getNecessary() && StringUtil.isEmpty(buildMessagePanel.getFooter())) {
+            return new ValidationInfo(ElementNecessary.EL_FOOTER.getElementErrorMessage());
+        }
+
+        // 填写格式判断(如末尾字符、字数等)
+        if (buildMessagePanel.getSubject().endsWith(CHAR_POINT) || buildMessagePanel.getSubject().endsWith(CHAR_POINT_CN)) {
+            return new ValidationInfo("提交简要描述(subject)不能以\".\"或\"。\"结尾");
+        }
+
+        if (buildMessagePanel.getSubject().length() > LENGTH_SUBJECT) {
+            return new ValidationInfo("提交简要描述(subject)的长度不能超过50");
+        }
 
         return null;
     }
 
-    public boolean checkMessage() {
-        return false;
+    public String getCommitMessage() {
+        StringBuilder stringBuilder = new StringBuilder();
+        // 构建Header
+        String type = buildMessagePanel.getType();
+        if (StringUtil.isNotEmpty(type)) {
+            stringBuilder.append(type);
+        }
+
+        String scope = buildMessagePanel.getScope();
+        if (StringUtil.isNotEmpty(scope)) {
+            stringBuilder.append("(").append(scope).append(")");
+        }
+
+        String subject = buildMessagePanel.getSubject();
+        if (StringUtil.isNotEmpty(subject)) {
+            stringBuilder.append(": ").append(subject).append("\n\n");
+        }
+
+        // 构建Body
+        String body = buildMessagePanel.getBody();
+        if (StringUtil.isNotEmpty(body)) {
+            stringBuilder.append(body).append("\n\n");
+        }
+
+        // 构建Footer
+        String footer = buildMessagePanel.getFooter();
+        if (StringUtil.isNotEmpty(footer)) {
+            FooterType footerType = buildMessagePanel.getFooterType();
+            stringBuilder.append(footerType.getDisplayText()).append(footer);
+        }
+
+        return stringBuilder.toString();
+    }
+
+    private class CustomOkAction extends DialogWrapperAction {
+        protected CustomOkAction(String name) {
+            super(name);
+        }
+
+        @Override
+        protected void doAction(ActionEvent actionEvent) {
+            ValidationInfo validationInfo = doValidate();
+            if (validationInfo != null) {
+                // 检验不通过
+                Messages.showMessageDialog(validationInfo.message, "检验不通过", Messages.getWarningIcon());
+            } else {
+                close(OK_EXIT_CODE);
+            }
+        }
     }
 }

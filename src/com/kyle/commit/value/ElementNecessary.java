@@ -9,23 +9,23 @@ public enum ElementNecessary {
     /**
      * 各个元素是否必填
      */
-    EL_TYPE("TYPE", true),
-    EL_SCOPE("SCOPE", false),
-    EL_SUBJECT("SUBJECT", true),
-    EL_BODY("BODY", false),
-    EL_FOOTER("FOOTER", false)
+    EL_TYPE("提交类型(type)不能为空", true),
+    EL_SCOPE("提交范围(scope)不能为空", false),
+    EL_SUBJECT("提交简介描述(subject)不能为空", true),
+    EL_BODY("提交详细描述(body)不能为空", false),
+    EL_FOOTER("提交备注(footer)不能为空", false)
     ;
 
-    private final String ElementType;
+    private final String elementErrorMessage;
     private final Boolean isNecessary;
 
     ElementNecessary(String elementType, Boolean isNecessary) {
-        ElementType = elementType;
+        elementErrorMessage = elementType;
         this.isNecessary = isNecessary;
     }
 
-    public String getElementType() {
-        return ElementType;
+    public String getElementErrorMessage() {
+        return elementErrorMessage;
     }
 
     public Boolean getNecessary() {
