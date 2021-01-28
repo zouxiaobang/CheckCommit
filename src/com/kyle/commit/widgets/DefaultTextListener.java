@@ -41,6 +41,6 @@ public class DefaultTextListener implements FocusListener {
 
     private void setDefaultText() {
         textComponent.setText(defaultText);
-        textComponent.setForeground(JBColor.LIGHT_GRAY);
+        textComponent.setForeground(JBColor.GRAY);
     }
 }
