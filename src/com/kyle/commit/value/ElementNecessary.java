@@ -13,14 +13,15 @@ public enum ElementNecessary {
     EL_SCOPE("提交范围(scope)不能为空", false),
     EL_SUBJECT("提交简介描述(subject)不能为空", true),
     EL_BODY("提交详细描述(body)不能为空", false),
-    EL_FOOTER("提交备注(footer)不能为空", false)
+    EL_FOOTER("提交备注(footer)不能为空", false),
+    EL_JIRA_CODE("jira的编号不能为空", false)
     ;
 
     private final String elementErrorMessage;
     private final Boolean isNecessary;
 
-    ElementNecessary(String elementType, Boolean isNecessary) {
-        elementErrorMessage = elementType;
+    ElementNecessary(String elementErrorMessage, Boolean isNecessary) {
+        this.elementErrorMessage = elementErrorMessage;
         this.isNecessary = isNecessary;
     }
 
@@ -28,7 +29,7 @@ public enum ElementNecessary {
         return elementErrorMessage;
     }
 
-    public Boolean getNecessary() {
+    public Boolean isNecessary() {
         return isNecessary;
     }
 }

@@ -6,6 +6,12 @@ import com.kyle.commit.value.FooterType;
 import com.kyle.commit.widgets.DefaultTextListener;
 
 import javax.swing.*;
+import javax.swing.text.JTextComponent;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+
+import static com.kyle.commit.value.CommitType.TYPE_FEAT;
+import static com.kyle.commit.value.CommitType.TYPE_FIX;
 
 /**
  * @author xb.zou
@@ -24,6 +30,8 @@ public class BuildMessagePanel implements IBuildMessagePanel {
     private JPanel footerPanel;
     private JRadioButton rbCompatibleChange;
     private JRadioButton rbCloseIssue;
+    private JTextField tfJiraCode;
+    private JRadioButton rbCloseStory;
 
     public BuildMessagePanel() {
         CommitType[] commitTypes = CommitType.values();
@@ -37,18 +45,21 @@ public class BuildMessagePanel implements IBuildMessagePanel {
         for (CommitType commitType : commitTypes) {
             cbType.addItem(commitType);
         }
-        cbType.setSelectedItem(CommitType.TYPE_FEAT);
+        cbType.setSelectedItem(TYPE_FEAT);
+        cbType.addItemListener(new TypeItemSelectedListener());
 
         // 设置默认文案
         tfScope.addFocusListener(new DefaultTextListener(tfScope, FieldDefaultText.DT_SCORE.getDefaultText()));
         tfSubject.addFocusListener(new DefaultTextListener(tfSubject, FieldDefaultText.DT_SUBJECT.getDefaultText()));
         taBody.addFocusListener(new DefaultTextListener(taBody, FieldDefaultText.DT_BODY.getDefaultText()));
         tfFooter.addFocusListener(new DefaultTextListener(tfFooter, FieldDefaultText.DT_FOOTER.getDefaultText()));
+        tfJiraCode.addFocusListener(new DefaultTextListener(tfJiraCode, FieldDefaultText.DT_JIRA_CODE.getDefaultText()));
 
         ButtonGroup buttonGroup = new ButtonGroup();
         buttonGroup.add(rbCompatibleChange);
         buttonGroup.add(rbCloseIssue);
-        rbCloseIssue.setSelected(true);
+        buttonGroup.add(rbCloseStory);
+        rbCloseStory.setSelected(true);
     }
 
     @Override
@@ -64,44 +75,66 @@ public class BuildMessagePanel implements IBuildMessagePanel {
 
     @Override
     public String getScope() {
-        if (!FieldDefaultText.DT_SCORE.getDefaultText().equals(this.tfScope.getText().trim())) {
-            return this.tfScope.getText().trim();
-        }
-        return "";
+        return getText(FieldDefaultText.DT_SCORE, tfScope);
     }
 
     @Override
     public String getSubject() {
-        if (!FieldDefaultText.DT_SUBJECT.getDefaultText().equals(this.tfSubject.getText().trim())) {
-            return this.tfSubject.getText().trim();
-        }
-        return "";
+        return getText(FieldDefaultText.DT_SUBJECT, tfSubject);
     }
 
     @Override
     public String getBody() {
-        if (!FieldDefaultText.DT_BODY.getDefaultText().equals(this.taBody.getText().trim())) {
-            return this.taBody.getText().trim();
-        }
-        return "";
+        return getText(FieldDefaultText.DT_BODY, taBody);
     }
 
     @Override
     public String getFooter() {
-        if (!FieldDefaultText.DT_FOOTER.getDefaultText().equals(this.tfFooter.getText().trim())) {
-            return this.tfFooter.getText().trim();
-        }
-        return "";
+        return getText(FieldDefaultText.DT_FOOTER, tfFooter);
     }
 
     @Override
     public FooterType getFooterType() {
         if (this.rbCloseIssue.isSelected()) {
-            return FooterType.FOOTER_CLOSE_ISSUE;
+            return FooterType.FOOTER_CLOSE_BUG;
         } else if (this.rbCompatibleChange.isSelected()) {
             return FooterType.FOOTER_COMPATIBLE_CHANGE;
+        } else if (this.rbCloseStory.isSelected()) {
+            return FooterType.FOOTER_CLOSE_STORY;
         }
 
-        return FooterType.FOOTER_CLOSE_ISSUE;
+        return FooterType.FOOTER_CLOSE_BUG;
+    }
+
+    @Override
+    public String getJiraCode() {
+        return getText(FieldDefaultText.DT_JIRA_CODE, tfJiraCode);
+    }
+
+    private String getText(FieldDefaultText fieldDefaultText, JTextComponent textComponent) {
+        if (!fieldDefaultText.getDefaultText().equals(textComponent.getText().trim())) {
+            return textComponent.getText().trim();
+        }
+        return "";
+    }
+
+    private class TypeItemSelectedListener implements ItemListener {
+        @Override
+        public void itemStateChanged(ItemEvent e) {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                changeFooterByType((CommitType) e.getItem());
+            }
+        }
+
+        private void changeFooterByType(CommitType commitType) {
+            String type = commitType.getType();
+            if (TYPE_FEAT.getType().equals(type)) {
+                rbCloseStory.setSelected(true);
+            } else if (TYPE_FIX.getType().equals(type)) {
+                rbCloseIssue.setSelected(true);
+            } else {
+                rbCompatibleChange.setSelected(true);
+            }
+        }
     }
 }

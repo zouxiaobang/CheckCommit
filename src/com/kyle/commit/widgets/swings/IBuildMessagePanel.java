@@ -45,4 +45,9 @@ public interface IBuildMessagePanel {
      * false：不兼容变动
      */
     FooterType getFooterType();
+
+    /**
+     * 获取Jira编码
+     */
+    String getJiraCode();
 }
