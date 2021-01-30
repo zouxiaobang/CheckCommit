@@ -100,17 +100,17 @@ public class CommitMessageDialog extends DialogWrapper {
         // 构建Header
         String type = buildMessagePanel.getType();
         if (StringUtil.isNotEmpty(type)) {
-            stringBuilder.append("type: ").append(type).append("\n");
+            stringBuilder.append(type);
         }
 
         String scope = buildMessagePanel.getScope();
         if (StringUtil.isNotEmpty(scope)) {
-            stringBuilder.append("scope: ").append(scope).append("\n");
+            stringBuilder.append("(").append(scope).append(")");
         }
 
         String subject = buildMessagePanel.getSubject();
         if (StringUtil.isNotEmpty(subject)) {
-            stringBuilder.append("subject: ").append(subject).append("\n\n");
+            stringBuilder.append(": ").append(subject).append("\n\n");
         }
 
         // 构建Body
@@ -121,7 +121,7 @@ public class CommitMessageDialog extends DialogWrapper {
 
         // 构建Footer
         FooterType footerType = buildMessagePanel.getFooterType();
-        stringBuilder.append("footer: (").append(footerType.getDisplayText()).append(")");
+        stringBuilder.append("(").append(footerType.getDisplayText()).append(")");
         String jiraCode = buildMessagePanel.getJiraCode();
         if (StringUtil.isNotEmpty(jiraCode)) {
             stringBuilder.append("(").append(jiraCode).append(")");
