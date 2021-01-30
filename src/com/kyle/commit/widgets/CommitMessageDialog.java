@@ -116,7 +116,7 @@ public class CommitMessageDialog extends DialogWrapper {
         // 构建Body
         String body = buildMessagePanel.getBody();
         if (StringUtil.isNotEmpty(body)) {
-            stringBuilder.append("body: ").append(body).append("\n\n");
+            stringBuilder.append(body).append("\n\n");
         }
 
         // 构建Footer
