@@ -1,14 +1,17 @@
 package com.kyle.commit.widgets.swings;
 
+import com.intellij.ui.JBColor;
 import com.kyle.commit.value.CommitType;
 import com.kyle.commit.value.FieldDefaultText;
 import com.kyle.commit.value.FooterType;
+import com.kyle.commit.value.OriginElementMessage;
 import com.kyle.commit.widgets.DefaultTextListener;
 
 import javax.swing.*;
 import javax.swing.text.JTextComponent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.Optional;
 
 import static com.kyle.commit.value.CommitType.TYPE_FEAT;
 import static com.kyle.commit.value.CommitType.TYPE_FIX;
@@ -65,6 +68,30 @@ public class BuildMessagePanel implements IBuildMessagePanel {
     @Override
     public JPanel getMainPanel() {
         return mainPanel;
+    }
+
+    @Override
+    public void backfillMessage(OriginElementMessage originElementMessage) {
+        if (originElementMessage.getType() == null) {
+            cbType.setSelectedItem(TYPE_FEAT);
+        } else {
+            cbType.setSelectedItem(originElementMessage.getType());
+        }
+        Optional.ofNullable(originElementMessage.getScope()).ifPresent(text -> fillText(tfScope, text));
+        Optional.ofNullable(originElementMessage.getSubject()).ifPresent(text -> fillText(tfSubject, text));
+        Optional.ofNullable(originElementMessage.getBody()).ifPresent(text -> fillText(taBody, text));
+        Optional.ofNullable(originElementMessage.getFooter()).ifPresent(text -> fillText(tfFooter, text));
+        Optional.ofNullable(originElementMessage.getJiraCode()).ifPresent(text -> fillText(tfJiraCode, text));
+        if (originElementMessage.getFooterType() == null) {
+            changeFooterByType(FooterType.FOOTER_CLOSE_STORY);
+        } else {
+            changeFooterByType(originElementMessage.getFooterType());
+        }
+    }
+
+    private void fillText(JTextComponent textComponent, String text) {
+        textComponent.setText(text);
+        textComponent.setForeground(JBColor.BLACK);
     }
 
     @Override
@@ -135,6 +162,16 @@ public class BuildMessagePanel implements IBuildMessagePanel {
             } else {
                 rbCompatibleChange.setSelected(true);
             }
+        }
+    }
+
+    private void changeFooterByType(FooterType footerType) {
+        if (FooterType.FOOTER_CLOSE_STORY == footerType) {
+            rbCloseStory.setSelected(true);
+        } else if (FooterType.FOOTER_CLOSE_BUG == footerType) {
+            rbCloseIssue.setSelected(true);
+        } else {
+            rbCompatibleChange.setSelected(true);
         }
     }
 }

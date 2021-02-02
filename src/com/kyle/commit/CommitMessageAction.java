@@ -6,7 +6,9 @@ import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.vcs.CommitMessageI;
 import com.intellij.openapi.vcs.VcsDataKeys;
+import com.intellij.openapi.vcs.ui.CommitMessage;
 import com.intellij.openapi.vcs.ui.Refreshable;
+import com.intellij.vcs.commit.CommitProjectPanelAdapter;
 import com.kyle.commit.widgets.CommitMessageDialog;
 import com.kyle.commit.widgets.swings.BuildMessagePanel;
 import org.jetbrains.annotations.NotNull;
@@ -28,6 +30,10 @@ public class CommitMessageAction extends AnAction implements DumbAware {
 
         // 创建提交信息的对话框
         CommitMessageDialog commitMessageDialog = new CommitMessageDialog(event.getProject(), new BuildMessagePanel());
+        if (commitMessagePanel instanceof CommitProjectPanelAdapter) {
+            CommitProjectPanelAdapter commitProjectPanelAdapter = (CommitProjectPanelAdapter) commitMessagePanel;
+            commitMessageDialog.backFillMessage(commitProjectPanelAdapter.getCommitMessage());
+        }
         commitMessageDialog.show();
         if (commitMessageDialog.getExitCode() == DialogWrapper.OK_EXIT_CODE) {
             commitMessagePanel.setCommitMessage(commitMessageDialog.getCommitMessage());

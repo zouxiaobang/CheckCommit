@@ -1,6 +1,7 @@
 package com.kyle.commit.widgets.swings;
 
 import com.kyle.commit.value.FooterType;
+import com.kyle.commit.value.OriginElementMessage;
 
 import javax.swing.*;
 
@@ -14,6 +15,11 @@ public interface IBuildMessagePanel {
      * 获取主界面
      */
     JPanel getMainPanel();
+
+    /**
+     * 回填数据
+     */
+    void backfillMessage(OriginElementMessage originElementMessage);
 
     /**
      * 获取提交类型

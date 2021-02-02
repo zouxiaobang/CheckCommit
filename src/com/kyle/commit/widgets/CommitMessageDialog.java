@@ -5,8 +5,10 @@ import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.ui.ValidationInfo;
 import com.intellij.openapi.util.text.StringUtil;
+import com.kyle.commit.BackfillMessage;
 import com.kyle.commit.value.ElementNecessary;
 import com.kyle.commit.value.FooterType;
+import com.kyle.commit.value.OriginElementMessage;
 import com.kyle.commit.widgets.swings.IBuildMessagePanel;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -51,6 +53,11 @@ public class CommitMessageDialog extends DialogWrapper {
         okAction.putValue(DialogWrapper.DEFAULT_ACTION, true);
 
         return new Action[]{okAction, cancelAction};
+    }
+
+    public void backFillMessage(String originMessage) {
+        OriginElementMessage originElementMessage = new BackfillMessage().translate(originMessage);
+        buildMessagePanel.backfillMessage(originElementMessage);
     }
 
     @Nullable

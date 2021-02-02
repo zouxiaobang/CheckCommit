@@ -1,6 +1,11 @@
 package com.kyle.commit.value;
 
 import com.intellij.openapi.util.text.StringUtil;
+import org.apache.commons.collections.CollectionUtils;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author xb.zou
@@ -43,6 +48,13 @@ public enum CommitType {
 
     public String getTypeExplanation() {
         return typeExplanation;
+    }
+
+    public static CommitType parse(String type) {
+        List<CommitType> commitTypes = Arrays.stream(CommitType.values())
+                        .filter(commitType -> commitType.getType().equalsIgnoreCase(type))
+                        .collect(Collectors.toList());
+        return CollectionUtils.isEmpty(commitTypes) ? null : commitTypes.get(0);
     }
 
     @Override
