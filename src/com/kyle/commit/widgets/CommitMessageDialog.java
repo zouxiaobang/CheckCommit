@@ -93,7 +93,7 @@ public class CommitMessageDialog extends DialogWrapper {
             return new ValidationInfo("提交简要描述(subject)的长度不能超过50");
         }
 
-        boolean isBugOrStory = buildMessagePanel.getFooterType() == FooterType.FOOTER_CLOSE_BUG
+        boolean isBugOrStory = buildMessagePanel.getFooterType() == FooterType.FOOTER_CLOSE
                 || buildMessagePanel.getFooterType() == FooterType.FOOTER_CLOSE_STORY;
         if (isBugOrStory && StringUtil.isEmpty(buildMessagePanel.getJiraCode())) {
             return new ValidationInfo(ElementNecessary.EL_JIRA_CODE.getElementErrorMessage());

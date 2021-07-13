@@ -32,9 +32,8 @@ public class BuildMessagePanel implements IBuildMessagePanel {
     private JPanel bodyPanel;
     private JPanel footerPanel;
     private JRadioButton rbCompatibleChange;
-    private JRadioButton rbCloseIssue;
+    private JRadioButton rbClose;
     private JTextField tfJiraCode;
-    private JRadioButton rbCloseStory;
 
     public BuildMessagePanel() {
         CommitType[] commitTypes = CommitType.values();
@@ -60,9 +59,8 @@ public class BuildMessagePanel implements IBuildMessagePanel {
 
         ButtonGroup buttonGroup = new ButtonGroup();
         buttonGroup.add(rbCompatibleChange);
-        buttonGroup.add(rbCloseIssue);
-        buttonGroup.add(rbCloseStory);
-        rbCloseStory.setSelected(true);
+        buttonGroup.add(rbClose);
+        rbClose.setSelected(true);
     }
 
     @Override
@@ -83,7 +81,7 @@ public class BuildMessagePanel implements IBuildMessagePanel {
         Optional.ofNullable(originElementMessage.getFooter()).ifPresent(text -> fillText(tfFooter, text));
         Optional.ofNullable(originElementMessage.getJiraCode()).ifPresent(text -> fillText(tfJiraCode, text));
         if (originElementMessage.getFooterType() == null) {
-            changeFooterByType(FooterType.FOOTER_CLOSE_STORY);
+            changeFooterByType(FooterType.FOOTER_CLOSE);
         } else {
             changeFooterByType(originElementMessage.getFooterType());
         }
@@ -122,15 +120,13 @@ public class BuildMessagePanel implements IBuildMessagePanel {
 
     @Override
     public FooterType getFooterType() {
-        if (this.rbCloseIssue.isSelected()) {
-            return FooterType.FOOTER_CLOSE_BUG;
+        if (this.rbClose.isSelected()) {
+            return FooterType.FOOTER_CLOSE;
         } else if (this.rbCompatibleChange.isSelected()) {
             return FooterType.FOOTER_COMPATIBLE_CHANGE;
-        } else if (this.rbCloseStory.isSelected()) {
-            return FooterType.FOOTER_CLOSE_STORY;
         }
 
-        return FooterType.FOOTER_CLOSE_BUG;
+        return FooterType.FOOTER_CLOSE;
     }
 
     @Override
@@ -155,10 +151,8 @@ public class BuildMessagePanel implements IBuildMessagePanel {
 
         private void changeFooterByType(CommitType commitType) {
             String type = commitType.getType();
-            if (TYPE_FEAT.getType().equals(type)) {
-                rbCloseStory.setSelected(true);
-            } else if (TYPE_FIX.getType().equals(type)) {
-                rbCloseIssue.setSelected(true);
+            if (TYPE_FIX.getType().equals(type) || TYPE_FEAT.getType().equals(type)) {
+                rbClose.setSelected(true);
             } else {
                 rbCompatibleChange.setSelected(true);
             }
@@ -166,10 +160,8 @@ public class BuildMessagePanel implements IBuildMessagePanel {
     }
 
     private void changeFooterByType(FooterType footerType) {
-        if (FooterType.FOOTER_CLOSE_STORY == footerType) {
-            rbCloseStory.setSelected(true);
-        } else if (FooterType.FOOTER_CLOSE_BUG == footerType) {
-            rbCloseIssue.setSelected(true);
+        if (FooterType.FOOTER_CLOSE == footerType) {
+            rbClose.setSelected(true);
         } else {
             rbCompatibleChange.setSelected(true);
         }

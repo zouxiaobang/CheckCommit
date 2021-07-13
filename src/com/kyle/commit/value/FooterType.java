@@ -13,9 +13,9 @@ import java.util.stream.Collectors;
  */
 public enum FooterType {
     /**
-     * 关闭issue
+     * 关闭issue/story
      */
-    FOOTER_CLOSE_BUG("bug"),
+    FOOTER_CLOSE("close"),
     FOOTER_CLOSE_STORY("story"),
     /**
      * 不兼容变动

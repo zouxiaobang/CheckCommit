@@ -152,20 +152,12 @@
               <text value=""/>
             </properties>
           </component>
-          <component id="86759" class="javax.swing.JRadioButton" binding="rbCloseIssue">
+          <component id="86759" class="javax.swing.JRadioButton" binding="rbClose">
             <constraints>
               <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text value="关闭bug"/>
-            </properties>
-          </component>
-          <component id="c9668" class="javax.swing.JRadioButton" binding="rbCloseStory">
-            <constraints>
-              <grid row="0" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties>
-              <text value="关闭Story"/>
+              <text value="关闭bug/story"/>
             </properties>
           </component>
         </children>
